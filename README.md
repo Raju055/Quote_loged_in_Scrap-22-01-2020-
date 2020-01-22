@@ -1,0 +1,1 @@
+# Quote_loged_in_Scrap-22-01-2020-
