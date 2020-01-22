@@ -36,7 +36,6 @@ with requests.session() as s:
             url = 'http://quotes.toscrape.com/page/'+ str(_page) +'/'
             req = s.get(url)
             q_soup = soup(req.content, 'html5lib')
-          
             _table = q_soup.findAll('div', attrs={'class' : 'quote'})
        
             try:
@@ -71,17 +70,16 @@ with requests.session() as s:
                 except Exception:
                     _author_url = 'NA'
                     pass
-
+                
                 print('Quote : '+_quote+ '  : Tag : '+_tag+ '  : Author : '+_author+ '  :  Author_url :  '+_author_url+ '  :  Publisher :  '+_publisher+ '  :  Publisher_url :  ' +_publisher_url)
-
                 try:
                     df = df.append(
                             {'Quote' : _quote, 'Tag' : _tag, 'Author' : _author, 'Author_url' : _author_url,
                              'Publisher' : _publisher, 'Publisher_url' : _publisher_url}, ignore_index=True)
+                    df.to_csv('quotes_login_scrap.csv', index=False)
                 except Exception:
-                    print('Not Added to DF')
+                    print('Not Added to DATAFRAME or CSV')
                     pass
-               
         except Exception:
             print("URL NOT FOUND :  FOR PAGE :  " +str(_page))
             pass
