@@ -22,11 +22,8 @@ with requests.session() as s:
     authentic_url = 'http://quotes.toscrape.com/login'
     r = s.get(authentic_url)
     page_soup = soup(r.content, 'html5lib')
-    #print(page_soup)
-
-   # a = page_soup.find('input', attrs={'name': 'csrf_token'})['value']
-   # print(a)                                                               # finding the csrf_token as it dynamically changes
-
+   
+# finding the csrf_token as it dynamically changes
     form_data['csrf_token'] = page_soup.find('input', attrs={'name':'csrf_token'})['value']
     r = s.post(authentic_url, data= form_data, headers= headers)
     login_page_soup = soup(r.content, 'html5lib')
@@ -39,10 +36,9 @@ with requests.session() as s:
             url = 'http://quotes.toscrape.com/page/'+ str(_page) +'/'
             req = s.get(url)
             q_soup = soup(req.content, 'html5lib')
-            #print(q_soup)
+          
             _table = q_soup.findAll('div', attrs={'class' : 'quote'})
-        #    print( len(_table))
-
+       
             try:
                 _publisher = q_soup.find('p', attrs={'class': 'text-muted'}).find('a').text
             except Exception:
@@ -60,28 +56,18 @@ with requests.session() as s:
                 except Exception:
                     _quote = 'NA'
                     pass
-
-
-                         # _tag_list = _row.findAll('div', attrs={'class' : 'tags'})
-
                 try:
                     _tag = _row.find('meta')['content']
                 except Exception:
                     _tag = 'NA'
                     pass
-
-        #                           for _row_tag in _tag_list:
-                #                           #q_soup.findAll('div', attrs={'class' : 'quote'})[00].contents[5].text
-        #                               _tag = _tag + (_row_tag.find('a', attrs= {'class' : 'tag'}).text)
-                #                               #q_soup.findAll('div', attrs={'class' : 'quote'})[00].contents[5].contents[3].text
-
                 try:
                     _author = _row.find('small').text
                 except Exception :
                     _author = 'NA'
                     pass
                 try:
-                    _author_url = _row.findAll('span')[1].find('a')['href']         #findAll('a')[1].
+                    _author_url = _row.findAll('span')[1].find('a')['href']     
                 except Exception:
                     _author_url = 'NA'
                     pass
@@ -95,14 +81,11 @@ with requests.session() as s:
                 except Exception:
                     print('Not Added to DF')
                     pass
-
-                #print('completed PAGE :  ' + str(_page)+ " :  Row completed  :  "  +str(_row+1))
-
-
+               
         except Exception:
             print("URL NOT FOUND :  FOR PAGE :  " +str(_page))
             pass
-        #print("COMPLETED PAGE :  " + str(_page))
+        print("COMPLETED PAGE :  " + str(_page))
         _page += 1
 
 
